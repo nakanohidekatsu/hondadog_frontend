@@ -13,7 +13,7 @@ export default function MusicPage() {
   const [sourceNode, setSourceNode] = useState<AudioBufferSourceNode | null>(null);
   const [filterNode, setFilterNode] = useState<BiquadFilterNode | null>(null);
   const [currentGain, setCurrentGain] = useState<number>(0);
-  const [fileName, setFileName] = useState<string>('');
+  //const [fileName, setFileName] = useState<string>('');
   const [musicId, setMusicId] = useState("");
   //const sourceRef = useRef(null);
 
@@ -44,7 +44,7 @@ export default function MusicPage() {
       const arrayBuffer = await res.arrayBuffer();
       const decoded = await audioContext.decodeAudioData(arrayBuffer);
       setAudioBuffer(decoded);
-      setFileName(`music ID: ${musicId}`);
+      //setFileName(`music ID: ${musicId}`);
     } catch (err) {
       console.error("音声の取得に失敗しました", err);
       alert("音楽が見つかりませんでした");
