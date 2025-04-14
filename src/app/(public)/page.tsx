@@ -49,9 +49,12 @@ function InnerComponent() {
   const timerRef = useRef(null);
 
   // オーディオ再生用状態
-  const [audioContext, setAudioContext] = useState(null);
-  const [audioBuffer, setAudioBuffer] = useState(null);
-  const sourceRef = useRef(null);
+  const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
+  const [audioBuffer, setAudioBuffer] = useState<AudioBuffer | null>(null);
+  const sourceRef = useRef<AudioBufferSourceNode | null>(null);
+//  const [audioContext, setAudioContext] = useState(null);
+//  const [audioBuffer, setAudioBuffer] = useState(null);
+//  const sourceRef = useRef(null);
 
   // 固定のタイマー候補を設定
   useEffect(() => {
