@@ -14,10 +14,14 @@ export default function Home() {
   useEffect(() => {
     const initAudio = async () => {
       //const context = new (window.AudioContext || window.webkitAudioContext)();
-      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      //const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) {
+        throw new Error("Web Audio API is not supported in this browser.");
+      }
       const context = new AudioCtx();
       setAudioContext(context);
-    
+        
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_POINT}/get_misic?souund_id=1`);
         const arrayBuffer = await res.arrayBuffer();
