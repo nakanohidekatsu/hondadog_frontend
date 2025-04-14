@@ -6,14 +6,25 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState, useRef } from "react";
 
 
-export default function Postspage() {
-//アバター切り替え//
+export default function MySearchComponent() {
+  const searchParams = useSearchParams();
   const [avatarIndex, setAvatarIndex] = useState(0);
   const avatars = [
     { src: "/images/dog1.jpg", fallback: "relax" },
     { src: "/images/dog2.jpg", fallback: "attract" },
     { src: "/images/dog3.jpg", fallback: "bored" },
   ];
+  return <div>Search parameter: {searchParams.get('foo')}</div>
+  }
+
+//export default function Postspage() {
+//アバター切り替え//
+//  const [avatarIndex, setAvatarIndex] = useState(0);
+//  const avatars = [
+//    { src: "/images/dog1.jpg", fallback: "relax" },
+//    { src: "/images/dog2.jpg", fallback: "attract" },
+//    { src: "/images/dog3.jpg", fallback: "bored" },
+//  ];
 
   const handleAvatarClick = () => {
     setAvatarIndex((prev) => (prev + 1) % avatars.length);
