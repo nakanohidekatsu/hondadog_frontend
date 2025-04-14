@@ -11,3 +11,6 @@ declare module '@radix-ui/react-dropdown-menu';
 
 // global.d.ts
 declare module 'lucide-react';
+
+// global.d.ts
+declare module '@radix-ui/react-label';
