@@ -27,6 +27,17 @@ function InnerComponent() {
   };
   const currentAvatar = avatars[avatarIndex];
 
+
+  const startAudio = () => {
+    if (audioBuffer && audioContext) {
+      const source = audioContext.createBufferSource();
+      source.buffer = audioBuffer;
+      source.connect(audioContext.destination);
+      source.start();
+      sourceRef.current = source;
+    }
+  };
+
   // タイマー用状態管理
   const [numbers, setNumbers] = useState<number[]>([]);
   const [index, setIndex] = useState(-1);
@@ -110,16 +121,6 @@ function InnerComponent() {
     };
     fetchAudio();
   }, [musicId, audioContext, apiEndpoint]);
-
-  const startAudio = () => {
-    if (audioBuffer && audioContext) {
-      const source = audioContext.createBufferSource();
-      source.buffer = audioBuffer;
-      source.connect(audioContext.destination);
-      source.start();
-      sourceRef.current = source;
-    }
-  };
 
   const stopAudio = () => {
     if (sourceRef.current) {
