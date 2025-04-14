@@ -55,8 +55,18 @@ function InnerComponent() {
     setTimerFinished(false);
     setPaused(false);
     startAudio();
-    }
-  };
+  }
+
+//  const handleStartTimer = () => {
+//    if (display) {
+//      const seconds = display * 60;
+//      setTimeLeft(seconds);
+//      setTimerActive(true);
+//      setTimerFinished(false);
+//      setPaused(false);
+//      startAudio();
+//    }
+//  };
 
   useEffect(() => {
     if (!timerActive || timeLeft === null || paused) return;
