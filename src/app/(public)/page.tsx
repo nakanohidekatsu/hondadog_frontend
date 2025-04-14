@@ -54,7 +54,7 @@ export default function MySearchComponent() {
 
   // 3. URLパラメータ取得
   // ==============================
-  const searchParams = useSearchParams();
+  //const searchParams = useSearchParams();
   const musicId = searchParams.get("musicId");
 
   // 4. タイマー候補（ハードコーディング）
