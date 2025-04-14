@@ -8,3 +8,6 @@ declare module '@radix-ui/react-alert-dialog';
 
 // global.d.ts
 declare module '@radix-ui/react-dropdown-menu';
+
+// global.d.ts
+declare module 'lucide-react';
