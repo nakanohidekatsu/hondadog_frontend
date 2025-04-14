@@ -1,52 +1,70 @@
 "use client";
 
-import React, { Suspense, useEffect, useState, useRef } from "react";
-import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useSearchParams } from "next/navigation";
+import Link from "next/link"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState, useRef } from "react";
 
-// 内部コンポーネントにて useSearchParams やその他のフックを使用する
-function InnerComponent() {
-  // URL パラメータ取得
-  const searchParams = useSearchParams();
-  const musicId = searchParams.get("musicId");
 
-  // NEXT_PUBLIC_API_ENDPOINT が undefined になっている場合は、環境変数の設定を確認してください
-  // 必要に応じてデフォルト値を設定することも検討してください
-  const apiEndpoint = process.env.NEXT_PUBLIC_API_ENDPOINT;
-
-  // アバター切り替えの状態管理
+export default function MySearchComponent() {
+//  const searchParams = useSearchParams();
   const [avatarIndex, setAvatarIndex] = useState(0);
   const avatars = [
     { src: "/images/dog1.jpg", fallback: "relax" },
     { src: "/images/dog2.jpg", fallback: "attract" },
     { src: "/images/dog3.jpg", fallback: "bored" },
   ];
+//  return <div>Search parameter: {searchParams.get('foo')}</div>
+  
+
+//export default function Postspage() {
+//アバター切り替え//
+//  const [avatarIndex, setAvatarIndex] = useState(0);
+//  const avatars = [
+//    { src: "/images/dog1.jpg", fallback: "relax" },
+//    { src: "/images/dog2.jpg", fallback: "attract" },
+//    { src: "/images/dog3.jpg", fallback: "bored" },
+//  ];
+
   const handleAvatarClick = () => {
     setAvatarIndex((prev) => (prev + 1) % avatars.length);
   };
+
   const currentAvatar = avatars[avatarIndex];
 
-  // タイマー用状態管理
-  const [numbers, setNumbers] = useState([]);
-  const [index, setIndex] = useState(-1);
-  const [timeLeft, setTimeLeft] = useState(null);
-  const [timerActive, setTimerActive] = useState(false);
-  const [timerFinished, setTimerFinished] = useState(false);
-  const [paused, setPaused] = useState(false);
-  const timerRef = useRef(null);
 
-  // オーディオ再生用状態
-  const [audioContext, setAudioContext] = useState(null);
-  const [audioBuffer, setAudioBuffer] = useState(null);
-  const sourceRef = useRef(null);
+////////ワラビーさんタイマー！！！////////////
+////////ワラビーさんタイマー！！！４番から//////////////
+  // 1. タイマー状態管理
+  // ==============================
+  const [numbers, setNumbers] = useState<number[]>([]);       // タイマー候補リスト
+  const [index, setIndex] = useState<number>(-1);             // 選択中のインデックス（候補がない状態：-1）
+  const [timeLeft, setTimeLeft] = useState<number | null>(null); // 残り時間（秒）
+  const [timerActive, setTimerActive] = useState(false);      // タイマーが動いているか
+  const [timerFinished, setTimerFinished] = useState(false);  // タイマーが終了したか
+  const [paused, setPaused] = useState(false);                // ⏸ 一時停止中かどうか
 
-  // 固定のタイマー候補を設定
+  const timerRef = useRef<NodeJS.Timeout | null>(null);       // タイマー制御用の参照
+
+  // 2. オーディオ再生用の状態管理
+  // ==============================
+  const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
+  const [audioBuffer, setAudioBuffer] = useState<AudioBuffer | null>(null);
+  const sourceRef = useRef<AudioBufferSourceNode | null>(null); // 音声再生ノード参照
+
+  // 3. URLパラメータ取得
+  // ==============================
+  const searchParams = useSearchParams();
+  const musicId = searchParams.get("musicId");
+
+  // 4. タイマー候補（ハードコーディング）
+  // ==============================
   useEffect(() => {
+    // ✅ バックエンドを使わず固定のタイマー候補を使用
     setNumbers([5, 10, 15, 20]);
   }, []);
 
-  const display = index === numbers.length ? "" : numbers[index];
+  const display = index === numbers.length ? "" : numbers[index]; // タイマー開始関数、表示する数字 or 空
 
   const handleStartTimer = () => {
     if (display) {
@@ -54,8 +72,8 @@ function InnerComponent() {
       setTimeLeft(seconds);
       setTimerActive(true);
       setTimerFinished(false);
-      setPaused(false);
-      startAudio();
+      setPaused(false);// タイマースタート時は一時停止状態を解除
+      startAudio(); // タイマースタートと同時に音楽再生開始
     }
   };
 
@@ -64,7 +82,7 @@ function InnerComponent() {
     if (timeLeft === 0) {
       setTimerActive(false);
       setTimerFinished(true);
-      stopAudio();
+      stopAudio(); // タイマー終了時に音楽停止
       return;
     }
 
@@ -72,35 +90,36 @@ function InnerComponent() {
       setTimeLeft((prev) => (prev ?? 0) - 1);
     }, 1000);
 
-    return () => clearTimeout(timerRef.current);
+    return () => clearTimeout(timerRef.current!);
   }, [timeLeft, timerActive, paused]);
 
-  const formatTime = (sec) => {
-    const m = Math.floor(sec / 60).toString().padStart(2, "0");
+  
+  const formatTime = (sec: number) => {
+    const m = Math.floor(sec / 60).toString().padStart(2, "0");  //６０秒を分：秒に
     const s = (sec % 60).toString().padStart(2, "0");
     return `${m}:${s}`;
   };
 
   useEffect(() => {
-    const context = new AudioContext();
+    const context = new AudioContext();  //AudioContextの初期化
     setAudioContext(context);
   }, []);
 
+/////音声ファイルの取得とデコード
   useEffect(() => {
     const fetchAudio = async () => {
-      if (!musicId || !audioContext || !apiEndpoint) return;
-      try {
-        const res = await fetch(`${apiEndpoint}/get_misic?souund_id=${musicId}`);
-        const arrayBuffer = await res.arrayBuffer();
-        const decoded = await audioContext.decodeAudioData(arrayBuffer);
-        setAudioBuffer(decoded);
-      } catch (error) {
-        console.error("音声のフェッチまたはデコードに失敗", error);
-      }
+      if (!musicId || !audioContext) return;
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/get_misic?souund_id=${musicId}`);
+      // const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/music/${musicId}`);
+      // const res = await fetch(`http://localhost:8000/music/${musicId}`);
+      const arrayBuffer = await res.arrayBuffer();
+      const decoded = await audioContext.decodeAudioData(arrayBuffer);
+      setAudioBuffer(decoded);
     };
     fetchAudio();
-  }, [musicId, audioContext, apiEndpoint]);
+  }, [musicId, audioContext]);
 
+///// 音楽再生関数
   const startAudio = () => {
     if (audioBuffer && audioContext) {
       const source = audioContext.createBufferSource();
@@ -111,6 +130,7 @@ function InnerComponent() {
     }
   };
 
+///// 音楽停止  
   const stopAudio = () => {
     if (sourceRef.current) {
       sourceRef.current.stop();
@@ -119,16 +139,21 @@ function InnerComponent() {
   };
 
   const handlePause = () => {
-    setPaused(true);
-    stopAudio();
+    setPaused(true);  // タイマーを一時停止
+    stopAudio();  //音楽を一時停止（停止）
     if (timerRef.current) clearTimeout(timerRef.current);
   };
 
   const handleResume = () => {
-    setPaused(false);
-    startAudio();
+    setPaused(false);  // タイマーを再開
+    startAudio();  // 音楽を再開（再生）
   };
 
+
+
+
+
+  
   return (
     <div className="flex flex-col items-center justify-start min-h-screen py-20 px-4">
       <p className="text-lg text-gray-600 mb-2">
@@ -165,58 +190,62 @@ function InnerComponent() {
 
       <div className="flex flex-col items-center">
         <div id="card1" className="w-full max-w-sm bg-gray-200 shadow-md p-6 rounded-full mb-8">
-          <h2 className="text-xl font-bold mb-2">トレーニング（練習）モード</h2>
-        </div>
+            <h2 className="text-xl font-bold mb-2">トレーニング（練習）モード</h2>
+        </div>         
+
 
         <div className="w-full max-w-sm bg-blue-100 shadow-md p-6 rounded-xl mb-8">
-          <h2 className="text-xl font-bold mb-2">pre-Step 1</h2>
-          <p>ワンちゃんの準備、スタート！</p>
-          <div className="flex flex-col gap-4">
-            <Link href="/music">
+            <h2 className="text-xl font-bold mb-2">pre-Step 1</h2>
+            <p>ワンちゃんの準備、スタート！</p>
+
+            <div className="flex flex-col gap-4">
+              <Link href="/music">
               <button className="bg-blue-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
                 ▶音楽を選ぶ
               </button>
-            </Link>
-            <Link href="/engine">
+              </Link>
+              <Link href="/engine">
               <button className="bg-blue-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
                 ▶エンジン音
               </button>
-            </Link>
-          </div>
+              </Link>
+            </div>
         </div>
 
         <div className="w-full max-w-sm bg-blue-100 shadow-md p-6 rounded-xl mb-30">
-          <h2 className="text-xl font-bold mb-2">pre-Step 2</h2>
-          <p>ワンちゃんの反応は？</p>
-          <Avatar
-            onClick={handleAvatarClick}
-            className="flex flex-col w-25 h-25 mx-auto mt-4 cursor-pointer"
-          >
-            <AvatarImage src={currentAvatar.src} />
-            <AvatarFallback>{currentAvatar.fallback}</AvatarFallback>
-          </Avatar>
+            <h2 className="text-xl font-bold mb-2">pre-Step 2</h2>
+            <p>ワンちゃんの反応は？</p>
+            <Avatar 
+              onClick={handleAvatarClick}
+              className="flex flex-col w-25 h-25 mx-auto mt-4 cursor-pointer">
+              <AvatarImage src={currentAvatar.src}/>
+              <AvatarFallback>{currentAvatar.fallback}</AvatarFallback>
+            </Avatar>
         </div>
+
+
+
 
         <div id="card2" className="w-full max-w-sm bg-gray-200 shadow-md p-6 rounded-full mb-8">
-          <h2 className="text-xl font-bold mb-2">お出かけ（本番）モード</h2>
+            <h2 className="text-xl font-bold mb-2">お出かけ（本番）モード</h2>
         </div>
 
-        {/* Step 1 */}
+        {/* Step 1: 音楽選択・再生 */}
         <div className="w-full max-w-sm bg-green-100 shadow-md p-6 rounded-xl mb-8">
           <h2 className="text-xl font-bold mb-2">Step 1</h2>
-          <p>ワンちゃんのリラックス♫</p>
+          <p>ワンちゃんのリラックス♫</p>         
           <div id="card3">
             <div className="flex flex-col gap-4">
               <Link href="/music2">
-                <button className="bg-green-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
-                  ▶音楽を選ぶ
-                </button>
+              <button className="bg-green-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
+                ▶音楽を選ぶ
+              </button>
               </Link>
             </div>
           </div>
         </div>
 
-        {/* Step 2 */}
+        {/* Step 2: 時間選択ボタンに修正済み */}
         <div className="w-full max-w-sm bg-green-100 shadow-md p-6 rounded-xl mb-8">
           <h2 className="text-xl font-bold mb-2">Step 2</h2>
           <p>お出かけまで、あと何分？</p>
@@ -236,7 +265,7 @@ function InnerComponent() {
           </div>
         </div>
 
-        {/* Step 3 */}
+        {/* Step 3: 一時停止と再開を切り替え表示 */}
         <div className="w-full max-w-sm bg-green-100 shadow-md p-6 rounded-xl mb-8">
           <h2 className="text-xl font-bold mb-2">Step 3</h2>
           <p>カウントダウン</p>
@@ -275,14 +304,5 @@ function InnerComponent() {
         </div>
       </div>
     </div>
-  );
-}
-
-// 外側コンポーネントで Suspense でラップすることで、useSearchParams 関連のエラーを解決
-export default function MySearchComponent() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <InnerComponent />
-    </Suspense>
   );
 }
