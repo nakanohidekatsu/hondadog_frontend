@@ -46,7 +46,8 @@ function InnerComponent() {
   const [timerActive, setTimerActive] = useState(false);
   const [timerFinished, setTimerFinished] = useState(false);
   const [paused, setPaused] = useState(false);
-  const timerRef = useRef(null);
+//  const timerRef = useRef(null);
+  const timerRef = useRef<number | null>(null);
 
   // オーディオ再生用状態
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
