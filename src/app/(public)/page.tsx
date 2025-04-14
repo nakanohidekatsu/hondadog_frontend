@@ -48,14 +48,13 @@ function InnerComponent() {
 
   const display = index === numbers.length ? "" : numbers[index];
 
-  const handleStartTimer = () => {
-    if (display) {
-      const seconds = display * 60;
-      setTimeLeft(seconds);
-      setTimerActive(true);
-      setTimerFinished(false);
-      setPaused(false);
-      startAudio();
+  if (typeof display === "number") {  // display が number の場合のみ処理する
+    const seconds = display * 60;
+    setTimeLeft(seconds);
+    setTimerActive(true);
+    setTimerFinished(false);
+    setPaused(false);
+    startAudio();
     }
   };
 
