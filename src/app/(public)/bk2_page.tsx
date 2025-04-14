@@ -67,7 +67,8 @@ export default function MySearchComponent() {
   const display = index === numbers.length ? "" : numbers[index]; // タイマー開始関数、表示する数字 or 空
 
   const handleStartTimer = () => {
-    if (display) {
+    if (typeof display === "number") {
+ //   if (display) {
       const seconds = display * 60;
       setTimeLeft(seconds);
       setTimerActive(true);
