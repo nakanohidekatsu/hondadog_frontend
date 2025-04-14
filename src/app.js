@@ -1,5 +1,5 @@
 // app.js
-const express = require('express');
+import express from 'express';
 const app = express();
 
 // 環境変数 PORT が設定されている場合はその値、なければ 3000 番ポートを使用
