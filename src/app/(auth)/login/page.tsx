@@ -13,7 +13,9 @@ export default function Home() {
 
   useEffect(() => {
     const initAudio = async () => {
-      const context = new (window.AudioContext || window.webkitAudioContext)();
+      //const context = new (window.AudioContext || window.webkitAudioContext)();
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      const context = new AudioCtx();
       setAudioContext(context);
     
       try {
