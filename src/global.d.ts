@@ -5,3 +5,6 @@ interface Window {
   
   // global.d.ts
 declare module '@radix-ui/react-alert-dialog';
+
+// global.d.ts
+declare module '@radix-ui/react-dropdown-menu';
