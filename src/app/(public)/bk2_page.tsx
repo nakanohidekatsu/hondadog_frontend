@@ -66,17 +66,27 @@ export default function MySearchComponent() {
 
   const display = index === numbers.length ? "" : numbers[index]; // タイマー開始関数、表示する数字 or 空
 
-  const handleStartTimer = () => {
-    if (typeof display === "number") {
- //   if (display) {
-      const seconds = display * 60;
-      setTimeLeft(seconds);
-      setTimerActive(true);
-      setTimerFinished(false);
-      setPaused(false);// タイマースタート時は一時停止状態を解除
-      startAudio(); // タイマースタートと同時に音楽再生開始
-    }
-  };
+//  const handleStartTimer = () => {
+//    if (typeof display === "number") {
+//   if (display) {
+//      const seconds = display * 60;
+//      setTimeLeft(seconds);
+//      setTimerActive(true);
+//      setTimerFinished(false);
+//      setPaused(false);// タイマースタート時は一時停止状態を解除
+//      startAudio(); // タイマースタートと同時に音楽再生開始
+//    }
+//  };
+
+  const display = index === numbers.length ? "" : numbers[index];
+
+  if (typeof display === "number") {
+    const seconds = display * 60;
+    setTimeLeft(seconds);
+    setTimerActive(true);
+    setTimerFinished(false);
+    setPaused(false);
+  }
 
   useEffect(() => {
     if (!timerActive || timeLeft === null || paused) return;
