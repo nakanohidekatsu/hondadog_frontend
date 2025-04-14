@@ -30,7 +30,8 @@ function InnerComponent() {
   // タイマー用状態管理
   const [numbers, setNumbers] = useState<number[]>([]);
   const [index, setIndex] = useState(-1);
-  const [timeLeft, setTimeLeft] = useState(null);
+//  const [timeLeft, setTimeLeft] = useState(null);
+  const [timeLeft, setTimeLeft] = useState<number | null>(null);
   const [timerActive, setTimerActive] = useState(false);
   const [timerFinished, setTimerFinished] = useState(false);
   const [paused, setPaused] = useState(false);
