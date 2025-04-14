@@ -15,7 +15,7 @@ export default function MySearchComponent() {
     { src: "/images/dog3.jpg", fallback: "bored" },
   ];
   return <div>Search parameter: {searchParams.get('foo')}</div>
-  }
+  
 
 //export default function Postspage() {
 //アバター切り替え//
