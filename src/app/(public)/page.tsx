@@ -98,7 +98,13 @@ function InnerComponent() {
       setTimeLeft((prev) => (prev ?? 0) - 1);
     }, 1000);
 
-    return () => clearTimeout(timerRef.current);
+//    return () => clearTimeout(timerRef.current);
+    return () => {
+      if (timerRef.current !== null) {
+        clearTimeout(timerRef.current);
+      }
+    };
+
   }, [timeLeft, timerActive, paused]);
 
   const formatTime = (sec) => {
