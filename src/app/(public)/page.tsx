@@ -7,14 +7,14 @@ import { useEffect, useState, useRef } from "react";
 
 
 export default function MySearchComponent() {
-  const searchParams = useSearchParams();
+//  const searchParams = useSearchParams();
   const [avatarIndex, setAvatarIndex] = useState(0);
   const avatars = [
     { src: "/images/dog1.jpg", fallback: "relax" },
     { src: "/images/dog2.jpg", fallback: "attract" },
     { src: "/images/dog3.jpg", fallback: "bored" },
   ];
-  return <div>Search parameter: {searchParams.get('foo')}</div>
+//  return <div>Search parameter: {searchParams.get('foo')}</div>
   
 
 //export default function Postspage() {
@@ -54,7 +54,7 @@ export default function MySearchComponent() {
 
   // 3. URLパラメータ取得
   // ==============================
-  //const searchParams = useSearchParams();
+  const searchParams = useSearchParams();
   const musicId = searchParams.get("musicId");
 
   // 4. タイマー候補（ハードコーディング）
