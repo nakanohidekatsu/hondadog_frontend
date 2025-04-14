@@ -85,6 +85,19 @@ function InnerComponent() {
 //    }
 //  };
 
+  const handleStartTimer = () => {
+    // ここでタイマーを開始する処理を記述します
+    // 例: 
+    if (typeof display === "number") {
+      const seconds = display * 60;
+      setTimeLeft(seconds);
+      setTimerActive(true);
+      setTimerFinished(false);
+      setPaused(false);
+      startAudio();
+    }
+  };
+
   useEffect(() => {
     if (!timerActive || timeLeft === null || paused) return;
     if (timeLeft === 0) {
