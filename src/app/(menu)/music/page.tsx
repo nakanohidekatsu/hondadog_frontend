@@ -50,7 +50,8 @@ export default function MusicPage() {
       //setFileName(`music ID: ${musicId}`);
     } catch (err) {
       console.error("音声の取得に失敗しました", err);
-      alert(`音楽が見つかりませんでした${musicId}`);
+      alert(process.env.NEXT_PUBLIC_API_ENDPOINT);
+    //  alert(`音楽が見つかりませんでした${musicId}`);
     }
   };
 
