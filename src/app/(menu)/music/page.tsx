@@ -16,6 +16,7 @@ export default function MusicPage() {
   //const [fileName, setFileName] = useState<string>('');
   const [musicId, setMusicId] = useState("");
   //const sourceRef = useRef(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const initAudio = async () => {
@@ -43,7 +44,7 @@ export default function MusicPage() {
 //      console.error(`nakano:/get_misic?souund_id=${musicId}`);
 //      console.error(`nakano:`,process.env.NEXT_PUBLIC_API_ENDPOINT);
       const res = await fetch(process.env.NEXT_PUBLIC_API_ENDPOINT + `/get_misic?souund_id=${musicId}`);
-
+         console.log("nakano:get_misic");
 //      const res = await fetch(`/get_misic?souund_id=1`);
 //      const res = await fetch(`https://app-002-step3-2-py-oshima9.azurewebsites.net/get_misic?souund_id=${musicId}`);
       if (!res.ok) throw new Error("音楽が見つかりません");
@@ -164,22 +165,33 @@ export default function MusicPage() {
           placeholder="音楽IDを入力（例: 002）"
           style={{ padding: "0.5rem", marginRight: "1rem" }}
           />
+
           <button
             onClick={async () => {
-              // 音源取得が完了するまで待つ
-              await fetchAudio();
-              // その後、音源の再生開始処理を実行する
-              await alert(`音楽のダウンロードが完了しました`);
-              // await startAudio();
+              setLoading(true);
+              try {
+                await fetchAudio();
+                await startAudio();
+              } catch (err) {
+                console.error("エラーが発生しました", err);
+                alert("音声再生の処理中にエラーが発生しました");
+              } finally {
+                setLoading(false);
+              }
             }}
-            className="bg-blue-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
-            【音源取得】
+            disabled={loading}
+            className="bg-blue-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer"
+          >
+            {loading ? "処理中..." : "【音源取得】"}
           </button>
+        
 
           <div style={{ margin: '20px 0' }}>
             <button 
               onClick={startAudio}
-              className="bg-blue-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">【再生開始】</button>
+//              onClick={() => startAudio}
+              className="bg-blue-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
+                【再生開始】</button>
           </div>
 
 
