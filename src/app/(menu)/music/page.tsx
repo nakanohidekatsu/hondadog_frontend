@@ -39,6 +39,7 @@ export default function MusicPage() {
 
     try {
 //      const res = await fetch(`${process.env.NEXT_PUBLIC_API_POINT}/get_misic?souund_id=${musicId}`);
+      console.log(`nakano:/get_misic?souund_id=${musicId}`);
       const res = await fetch(process.env.NEXT_PUBLIC_API_ENDPOINT + `/get_misic?souund_id=${musicId}`);
       if (!res.ok) throw new Error("音楽が見つかりません");
       const arrayBuffer = await res.arrayBuffer();
