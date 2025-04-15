@@ -40,10 +40,10 @@ export default function MusicPage() {
 
     try {
 //      const res = await fetch(`${process.env.NEXT_PUBLIC_API_POINT}/get_misic?souund_id=${musicId}`);
-      console.error(`nakano:/get_misic?souund_id=${musicId}`);
-      console.error(`nakano:`,process.env.NEXT_PUBLIC_API_ENDPOINT);
-//      const res = await fetch(process.env.NEXT_PUBLIC_API_ENDPOINT + `/get_misic?souund_id=${musicId}`);
-      const res = await fetch(`https://app-002-step3-2-py-oshima9.azurewebsites.net/get_misic?souund_id=${musicId}`);
+//      console.error(`nakano:/get_misic?souund_id=${musicId}`);
+//      console.error(`nakano:`,process.env.NEXT_PUBLIC_API_ENDPOINT);
+      const res = await fetch(process.env.NEXT_PUBLIC_API_ENDPOINT + `/get_misic?souund_id=${musicId}`);
+//      const res = await fetch(`https://app-002-step3-2-py-oshima9.azurewebsites.net/get_misic?souund_id=${musicId}`);
       if (!res.ok) throw new Error("音楽が見つかりません");
       const arrayBuffer = await res.arrayBuffer();
       const decoded = await audioContext.decodeAudioData(arrayBuffer);
@@ -52,7 +52,7 @@ export default function MusicPage() {
     } catch (err) {
       console.error("音声の取得に失敗しました", err);
     //  alert(process.env.NEXT_PUBLIC_API_ENDPOINT);
-      alert(`音楽が見つかりませんでした${musicId}`);
+      alert(`音楽が見つかりませんでした`);
     }
   };
 
