@@ -65,14 +65,26 @@ function InnerComponent() {
 
   const display = index === numbers.length ? "" : numbers[index];
 
-  if (typeof display === "number") {  // display が number の場合のみ処理する
-    const seconds = display * 60;
-    setTimeLeft(seconds);
-    setTimerActive(true);
-    setTimerFinished(false);
-    setPaused(false);
-    startAudio();
-  }
+  useEffect(() => {
+    if (typeof display === "number") {
+      const seconds = display * 60;
+      setTimeLeft(seconds);
+      setTimerActive(true);
+      setTimerFinished(false);
+      setPaused(false);
+      startAudio();
+    }
+  }, [display]);
+
+//  const display = index === numbers.length ? "" : numbers[index];
+//  if (typeof display === "number") {  // display が number の場合のみ処理する
+//    const seconds = display * 60;
+//    setTimeLeft(seconds);
+//    setTimerActive(true);
+//    setTimerFinished(false);
+//    setPaused(false);
+//    startAudio();
+//  }
 
 //  const handleStartTimer = () => {
 //    if (display) {
