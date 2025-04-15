@@ -35,6 +35,7 @@ export default function MusicPage() {
 
   // 音楽IDに応じて音声ファイルを取得
   const fetchAudio = async () => {
+    console.log("nakano:fetchAudio");
     if (!musicId || !audioContext) return;
 
     try {
