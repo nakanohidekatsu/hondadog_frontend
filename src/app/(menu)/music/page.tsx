@@ -169,7 +169,8 @@ export default function MusicPage() {
               // 音源取得が完了するまで待つ
               await fetchAudio();
               // その後、音源の再生開始処理を実行する
-              await startAudio();
+              await alert(`音楽のダウンロードが完了しました`);
+              // await startAudio();
             }}
             className="bg-blue-200 font-bold px-6 py-3 rounded-full text-lg cursor-pointer">
             【音源取得】
